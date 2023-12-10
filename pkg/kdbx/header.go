@@ -66,18 +66,18 @@ type Header struct {
 	Value  []byte
 
 	// Optional fields
-	Comment          *string
-	CipherID         *Cipher
-	CompressionFlags *uint32
-	MasterSeed       *[]byte
-	TransformSeed    *[]byte
-	TransformRounds  *uint64
-	EncryptionIV     *[]byte
-	StreamKey        *[]byte
-	StreamStartBytes *[]byte
-	RandomStreamID   *uint32
-	KDFParameters    VariantMap
-	PublicCustomData VariantMap
+	Comment          *string     `json:",omitempty"`
+	CipherID         *Cipher     `json:",omitempty"`
+	CompressionFlags *uint32     `json:",omitempty"`
+	MasterSeed       *[]byte     `json:",omitempty"`
+	TransformSeed    *[]byte     `json:",omitempty"`
+	TransformRounds  *uint64     `json:",omitempty"`
+	EncryptionIV     *[]byte     `json:",omitempty"`
+	StreamKey        *[]byte     `json:",omitempty"`
+	StreamStartBytes *[]byte     `json:",omitempty"`
+	RandomStreamID   *uint32     `json:",omitempty"`
+	KDFParameters    *VariantMap `json:",omitempty"`
+	PublicCustomData *VariantMap `json:",omitempty"`
 }
 
 func (h Header) String() string {
@@ -91,7 +91,7 @@ func (h Header) String() string {
 	case EndOfHeader:
 		break
 	case Comment:
-		buffer.WriteString(fmt.Sprintf("Comment:\t%s", h.Value))
+		buffer.WriteString(fmt.Sprintf("Comment:\t%s", *h.Comment))
 	case CipherID:
 		buffer.WriteString(fmt.Sprintf("Cipher:\t\t%s", h.CipherID))
 	case CompressionFlags:
@@ -103,17 +103,17 @@ func (h Header) String() string {
 	case TransformRounds:
 		buffer.WriteString(fmt.Sprintf("TransformRounds:\t%d", *h.TransformRounds))
 	case EncryptionIV:
-		buffer.WriteString(fmt.Sprintf("EncryptionIV:\t0x%X", h.Value))
+		buffer.WriteString(fmt.Sprintf("EncryptionIV:\t0x%X", h.EncryptionIV))
 	case StreamKey:
-		buffer.WriteString(fmt.Sprintf("ProtectedStreamKey:\t0x%X", *h.StreamKey))
+		buffer.WriteString(fmt.Sprintf("StreamKey:\t0x%X", *h.StreamKey))
 	case StreamStartBytes:
 		buffer.WriteString(fmt.Sprintf("StreamStartBytes:\t0x%X", *h.StreamStartBytes))
 	case RandomStreamID:
 		buffer.WriteString(fmt.Sprintf("RandomStreamID:\t%d", *h.RandomStreamID))
 	case KDFParameters:
-		buffer.WriteString(fmt.Sprintf("KDFParameters:\n%s", h.KDFParameters))
+		buffer.WriteString(fmt.Sprintf("KDFParameters:\n%s", *h.KDFParameters))
 	case PublicCustomData:
-		buffer.WriteString(fmt.Sprintf("PublicCustomData:\n%s", h.PublicCustomData))
+		buffer.WriteString(fmt.Sprintf("PublicCustomData:\n%s", *h.PublicCustomData))
 	default:
 		buffer.WriteString(fmt.Sprintf("Unknown header type: 0x%X", h.Type))
 	}
@@ -185,10 +185,12 @@ func ParseHeader(r io.Reader, kdbxVersion uint16) Header {
 		header.RandomStreamID = &randomStreamID
 	case KDFParameters:
 		valueReader := bytes.NewReader(header.Value)
-		header.KDFParameters = ParseVariantMap(valueReader)
+		kdfParametersMap := ParseVariantMap(valueReader)
+		header.KDFParameters = &kdfParametersMap
 	case PublicCustomData:
 		valueReader := bytes.NewReader(header.Value)
-		header.PublicCustomData = ParseVariantMap(valueReader)
+		publicCustomDataMap := ParseVariantMap(valueReader)
+		header.PublicCustomData = &publicCustomDataMap
 	}
 
 	return header
