@@ -104,7 +104,7 @@ func (v Variant) String() string {
 			if err != nil {
 				return ""
 			}
-			buffer.WriteString(fmt.Sprintf("%s", parsedUUID.String()))
+			buffer.WriteString(parsedUUID.String())
 
 			value := KDFAlgorithm(v.Value)
 			switch value {
