@@ -9,18 +9,18 @@ import (
 )
 
 type KeePassFile struct {
-	MagicBytes       MagicBytes
-	Signature        KeePassSignature
-	Version          Version
-	Headers          []Header
-	HeaderSHA256     HeaderSHA256
-	HeaderHMACSHA256 HeaderHMACSHA256
-	EncryptedData    []byte
+	MagicBytes          MagicBytes `json:"-"`
+	Signature           KeePassSignature
+	Version             Version
+	Headers             []Header
+	HeaderSHA256        HeaderSHA256
+	HeaderHMACSHA256    HeaderHMACSHA256
+	EncryptedData       []byte `json:"-"`
+	EncryptedDataLength int
 }
 
 func (k KeePassFile) String() string {
 	var buffer bytes.Buffer
-	fmt.Println("KeePassFile")
 
 	buffer.WriteString(fmt.Sprintf("MagicBytes:\t0x%X\n", k.MagicBytes))
 	buffer.WriteString(fmt.Sprintf("Signature:\t%s\n", k.Signature))
@@ -80,6 +80,7 @@ func Parse(r io.Reader) KeePassFile {
 		log.Fatal(readErr)
 	}
 	keepassFile.EncryptedData = data
+	keepassFile.EncryptedDataLength = len(data)
 
 	return keepassFile
 }
