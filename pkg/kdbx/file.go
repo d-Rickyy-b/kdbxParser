@@ -86,14 +86,9 @@ func Parse(r io.Reader) KeePassFile {
 }
 
 func ParseFromBytes(b []byte) KeePassFile {
-	var keepassFile KeePassFile
 	byteReader := bytes.NewReader(b)
 
-	err := binary.Read(byteReader, binary.LittleEndian, &keepassFile)
-	if err != nil {
-		log.Fatal(err)
-	}
-	return keepassFile
+	return Parse(byteReader)
 }
 
 func readHeaders(r io.Reader, kdbxVersion uint16) []Header {
