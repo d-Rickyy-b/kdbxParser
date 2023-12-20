@@ -5,9 +5,10 @@ import (
 	"encoding/binary"
 	"errors"
 	"fmt"
-	"github.com/google/uuid"
 	"io"
 	"log"
+
+	"github.com/google/uuid"
 )
 
 type VariantMap struct {

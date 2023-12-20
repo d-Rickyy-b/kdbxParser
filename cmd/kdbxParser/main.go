@@ -2,10 +2,11 @@ package main
 
 import (
 	"fmt"
-	"github.com/akamensky/argparse"
 	"kdbxParser/pkg/kdbx"
 	"log"
 	"os"
+
+	"github.com/akamensky/argparse"
 )
 
 func main() {
