@@ -1,6 +1,11 @@
 package kdbx
 
-import "fmt"
+import (
+	"encoding/json"
+	"fmt"
+
+	"github.com/google/uuid"
+)
 
 type Cipher [16]byte
 
@@ -30,4 +35,19 @@ func (c Cipher) String() string {
 	default:
 		return fmt.Sprintf("Unknown (0x%X)\n", c)
 	}
+}
+
+func (c Cipher) MarshalJSON() ([]byte, error) {
+	cipherUUID, err := uuid.FromBytes(c[:])
+	if err != nil {
+		return nil, err
+	}
+
+	return json.Marshal(&struct {
+		ID   string `json:"id"`
+		Name string `json:"name"`
+	}{
+		ID:   cipherUUID.String(),
+		Name: c.String(),
+	})
 }

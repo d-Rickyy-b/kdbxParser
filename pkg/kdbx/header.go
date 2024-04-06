@@ -3,13 +3,16 @@ package kdbx
 import (
 	"bytes"
 	"encoding/binary"
+	"encoding/json"
 	"fmt"
 	"io"
 	"log"
 )
 
-type HeaderSHA256 uint32
-type HeaderHMACSHA256 uint32
+type (
+	HeaderSHA256     uint32
+	HeaderHMACSHA256 uint32
+)
 
 type HeaderType byte
 
@@ -58,6 +61,16 @@ func (ht HeaderType) String() string {
 	default:
 		return "Unknown header type:"
 	}
+}
+
+func (ht HeaderType) MarshalJSON() ([]byte, error) {
+	return json.Marshal(&struct {
+		ID   int    `json:"id"`
+		Name string `json:"name"`
+	}{
+		ID:   int(ht),
+		Name: ht.String(),
+	})
 }
 
 type Header struct {

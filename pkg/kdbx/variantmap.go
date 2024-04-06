@@ -3,6 +3,7 @@ package kdbx
 import (
 	"bytes"
 	"encoding/binary"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"io"
@@ -28,6 +29,51 @@ func (v VariantMap) String() string {
 		buffer.WriteString("\n")
 	}
 	return buffer.String()
+}
+
+func (v VariantMap) MarshalJSON() ([]byte, error) {
+	vmap := make(map[string]interface{})
+	for _, variant := range v.Variants {
+		switch variant.Type {
+		case t_uint32:
+			variantValue := binary.LittleEndian.Uint32(variant.Value)
+			vmap[string(variant.Key)] = variantValue
+		case t_uint64:
+			variantValue := binary.LittleEndian.Uint64(variant.Value)
+			vmap[string(variant.Key)] = variantValue
+		case t_bool:
+			variantValue := binary.LittleEndian.Uint32(variant.Value) != 0
+			vmap[string(variant.Key)] = variantValue
+		case t_int32:
+			variantValue := binary.LittleEndian.Uint32(variant.Value)
+			vmap[string(variant.Key)] = variantValue
+		case t_string:
+			vmap[string(variant.Key)] = fmt.Sprintf("%s", variant.Value)
+		case t_bytearr:
+			if string(variant.Key) == "$UUID" {
+				parsedUUID, err := uuid.FromBytes(variant.Value)
+				if err != nil {
+					return nil, err
+				}
+
+				value := KDFAlgorithm(variant.Value)
+				switch value {
+				case AESKDF:
+					vmap[string(variant.Key)] = parsedUUID.String() + " (AES-KDF)"
+				case Argon2d:
+					vmap[string(variant.Key)] = parsedUUID.String() + " (Argon2d)"
+				case Argon2id:
+					vmap[string(variant.Key)] = parsedUUID.String() + " (Argon2id)"
+				default:
+					vmap[string(variant.Key)] = parsedUUID.String() + " (Unknown)"
+				}
+			} else {
+				vmap[string(variant.Key)] = fmt.Sprintf("0x%X", variant.Value)
+			}
+		}
+	}
+
+	return json.Marshal(vmap)
 }
 
 type VariantMapEntryType byte

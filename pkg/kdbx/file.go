@@ -3,6 +3,7 @@ package kdbx
 import (
 	"bytes"
 	"encoding/binary"
+	"encoding/json"
 	"fmt"
 	"io"
 	"log"
@@ -35,6 +36,24 @@ func (k KeePassFile) String() string {
 	buffer.WriteString(fmt.Sprintf("EncryptedData:\t\t%d bytes\n", len(k.EncryptedData)))
 
 	return buffer.String()
+}
+
+// JSON returns the json encoded KeePassFile as string.
+func (k KeePassFile) JSON() string {
+	jsonString, err := json.Marshal(k)
+	if err != nil {
+		log.Fatal(err)
+	}
+	return string(jsonString)
+}
+
+// JSON returns the json encoded KeePassFile as string.
+func (k KeePassFile) JSONPretty() string {
+	jsonString, err := json.MarshalIndent(k, "", "  ")
+	if err != nil {
+		log.Fatal(err)
+	}
+	return string(jsonString)
 }
 
 type KeePassMetadata struct {
