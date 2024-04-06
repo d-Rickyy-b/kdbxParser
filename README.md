@@ -3,6 +3,8 @@
 This tool is a parser for the KeePass binary file format.
 It helps you understand the structure of the file and extract information from it, such as the used encryption algorithm, information about the key derivation function, and the length of encrypted data.
 
+I also created a hexpat pattern for the [imhex](https://github.com/WerWolv/ImHex) hex editor. Check it out at [docs/kdbx.hexpat](https://github.com/d-Rickyy-b/kdbxParser/tree/master/docs/kdbx.hexpat).
+
 ## Example
 
 ```
