@@ -116,7 +116,7 @@ func (h Header) String() string {
 	case TransformRounds:
 		buffer.WriteString(fmt.Sprintf("TransformRounds:\t%d", *h.TransformRounds))
 	case EncryptionIV:
-		buffer.WriteString(fmt.Sprintf("EncryptionIV:\t0x%X", h.EncryptionIV))
+		buffer.WriteString(fmt.Sprintf("EncryptionIV:\t0x%X", *h.EncryptionIV))
 	case StreamKey:
 		buffer.WriteString(fmt.Sprintf("StreamKey:\t0x%X", *h.StreamKey))
 	case StreamStartBytes:
