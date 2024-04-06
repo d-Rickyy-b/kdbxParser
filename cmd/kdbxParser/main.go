@@ -2,9 +2,10 @@ package main
 
 import (
 	"fmt"
-	"kdbxParser/pkg/kdbx"
 	"log"
 	"os"
+
+	"kdbxParser/pkg/kdbx"
 
 	"github.com/akamensky/argparse"
 )
