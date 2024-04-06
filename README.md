@@ -28,10 +28,25 @@ EncryptedData:          1744 bytes
 
 ## Usage
 
+```text
+usage: kdbxParser [-h|--help] -f|--file "<value>" [--json] [-p|--pretty] [-t|--template "<value>"]
+                  Obtain metadata from a KeePass file
+
+Arguments:
+
+  -h  --help      Print help information
+  -f  --file      Path to the keepass file
+      --json      Print the result as a json string. Default: false
+  -p  --pretty    Prettify the json output. Default: false
+  -t  --template  Go template to format the output with - e.g. {{.Version}}. Default:
 ```
-usage: kdbxParser [-h|--help] -f|--file "<value>"
-    Parses a KeePass binary file and prints information about it
+
+## Build from source
+
+Building from source is easy:
+
+```bash
+go build ./cmd/kdbxParser
 ```
 
 It wouldn't have been possible without [this article](https://palant.info/2023/03/29/documenting-keepass-kdbx4-file-format/) by Wladimir Palant, [this GitHub Gist](https://gist.github.com/lgg/e6ccc6e212d18dd2ecd8a8c116fb1e45), and last but not least, the [KeePass docs](https://keepass.info/help/kb/kdbx_4.html).
-
