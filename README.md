@@ -51,4 +51,4 @@ Building from source is easy:
 go build ./cmd/kdbxParser
 ```
 
-It wouldn't have been possible without [this article](https://palant.info/2023/03/29/documenting-keepass-kdbx4-file-format/) by Wladimir Palant, [this GitHub Gist](https://gist.github.com/lgg/e6ccc6e212d18dd2ecd8a8c116fb1e45), and last but not least, the [KeePass docs](https://keepass.info/help/kb/kdbx_4.html).
+It wouldn't have been possible without [this article](https://palant.info/2023/03/29/documenting-keepass-kdbx4-file-format/) by Wladimir Palant, [this GitHub Gist](https://gist.github.com/lgg/e6ccc6e212d18dd2ecd8a8c116fb1e45), [jorabin/KeePassJava2](https://github.com/jorabin/KeePassJava2), and last but not least, the [KeePass docs](https://keepass.info/help/kb/kdbx_4.html).
