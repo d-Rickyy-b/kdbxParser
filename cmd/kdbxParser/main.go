@@ -5,6 +5,7 @@ import (
 	"io"
 	"log"
 	"os"
+	"text/template"
 
 	"kdbxParser/pkg/kdbx"
 
@@ -18,6 +19,7 @@ func main() {
 	targetFile := parser.String("f", "file", &argparse.Options{Required: true, Help: "Path to the keepass file"})
 	useJSON := parser.Flag("", "json", &argparse.Options{Required: false, Help: "Print the result as a json string", Default: false})
 	prettifyJSON := parser.Flag("p", "pretty", &argparse.Options{Required: false, Help: "Prettify the json output", Default: false})
+	templateString := parser.String("t", "template", &argparse.Options{Required: false, Help: "Go template to format the output with - e.g. {{.Version}}", Default: ""})
 
 	if err := parser.Parse(os.Args); err != nil {
 		fmt.Print(parser.Usage(err))
@@ -48,6 +50,16 @@ func main() {
 		}
 		fmt.Println(f.JSON())
 		return
+	} else if *templateString != "" {
+		// Use the template to format the output
+		tmpl, err := template.New("kdbx").Parse(*templateString)
+		if err != nil {
+			log.Fatal(err)
+		}
+		err2 := tmpl.Execute(os.Stdout, f)
+		if err2 != nil {
+			log.Fatal(err2)
+		}
 	} else {
 		// Just use the stringer to print the struct
 		fmt.Println(f)
