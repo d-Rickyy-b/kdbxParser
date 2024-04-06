@@ -22,7 +22,7 @@ type KeePassFile struct {
 func (k KeePassFile) String() string {
 	var buffer bytes.Buffer
 
-	buffer.WriteString(fmt.Sprintf("MagicBytes:\t0x%X\n", k.MagicBytes))
+	buffer.WriteString(fmt.Sprintf("MagicBytes:\t%s\n", k.MagicBytes))
 	buffer.WriteString(fmt.Sprintf("Signature:\t%s\n", k.Signature))
 	buffer.WriteString(fmt.Sprintf("Version:\t%s\n", k.Version))
 	buffer.WriteString("Headers:\n")
